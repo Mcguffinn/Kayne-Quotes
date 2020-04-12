@@ -1,9 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import head from '../images/kayne_head.png'
 import '../App.css';
+import {Howl, Howler} from 'howler';
+import yo from '../sounds/Yo.mp3'
+import robot from '../sounds/A robot.mp3'
 
-const Quotes = () =>{
+const head = document.getElementById('Kanye');
+const speachBubble = document.getElementById('bubble');
+
+const Quotes = props =>{
 
     const [quote, setQuote] = useState([])
 
@@ -18,21 +23,50 @@ const Quotes = () =>{
             },[])
     }
 
-    var audio = new Audio('../sounds/Yo.mp3')
+    
 
     const funHolder = () =>{
+        const audio = new Howl({
+            src:[yo, robot],
+            html5: true,
+        });
+        // audio.type=`audio/mp3`;
+
+        try{
+            audio.play();
+            console.log('Playing... ');
+        }catch (error){
+            console.log("It didnt work..." + error);
+        }
         newQuote();
-        audio.play();
     }
+
+    
+
+    props.myRef.hover(
+        function() {
+            speachBubble.css({
+                "animation-name": 'expand-bounce',
+                "animation-duration": ".025s"
+            });
+        },
+        function(){
+            speachBubble.css({
+                "animation-name": "shrink",
+                "animation-duration": "0.1s"
+            })
+        }
+    )
     return(
-        <div>
-            <image src={head} alt='the crown'/>
-            <p className='Quote'>
-                Kayne Preaches: {quote} 
-            </p>
+        <div className="bubble-wrap">
+            <source src="../sounds/Yo.mp3" type="audio/mp3"/>
             <button onClick={()=>funHolder()}>The Gospel </button>
+            <div className='bubble'>
+                <p className='Quote'>
+                    Kayne Preaches: {quote} 
+                </p>
+            </div>
         </div>
-        
     );
 }
 
