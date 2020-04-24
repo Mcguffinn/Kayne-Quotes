@@ -1,16 +1,18 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
 import '../App.css';
-import {Howl, Howler} from 'howler';
+import {Howl} from 'howler';
 import yo from '../sounds/Yo.mp3'
 import robot from '../sounds/A robot.mp3'
+import { Container, Button, Alert } from 'react-bootstrap';
+import { CSSTransition } from 'react-transition-group';
 
-const head = document.getElementById('Kanye');
-const speachBubble = document.getElementById('bubble');
 
-const Quotes = props =>{
+const Quotes = () =>{
 
     const [quote, setQuote] = useState([])
+    const [showMessage, setShowMessage] = useState(false);
+    const [showButton, setShowButton] = useState(true);
 
     const newQuote = () =>{
             axios
@@ -43,31 +45,62 @@ const Quotes = props =>{
 
     
 
-    props.myRef.hover(
-        function() {
-            speachBubble.css({
-                "animation-name": 'expand-bounce',
-                "animation-duration": ".025s"
-            });
-        },
-        function(){
-            speachBubble.css({
-                "animation-name": "shrink",
-                "animation-duration": "0.1s"
-            })
-        }
-    )
+
     return(
         <div className="bubble-wrap">
             <source src="../sounds/Yo.mp3" type="audio/mp3"/>
-            <button onClick={()=>funHolder()}>The Gospel </button>
+            
             <div className='bubble'>
-                <p className='Quote'>
-                    Kayne Preaches: {quote} 
-                </p>
+                <Container style={{paddingTop: '2rem'}} >
+                    <Button onClick={()=> { 
+                        funHolder(); 
+                        setShowMessage(true);
+                        }}
+                        size="lg"
+                        >
+                        The Gospel 
+                    </Button>
+                    <CSSTransition 
+                        in={showMessage} 
+                        timeout={300} 
+                        classNames='alert' 
+                        unmountOnExit onEnter={() => setShowButton(false)}
+                        onExited={() => setShowButton(true)}>
+
+                        <Alert variant="primary" dismissible onClose={()=> setShowMessage(false)}>
+                            <Alert.Heading>
+                                Kayne Preaches:
+                            </Alert.Heading>
+                            <p className='Quote'>
+                                {quote} 
+                            </p>
+                            {/* <Button onClick={() => setShowMessage(false)}>
+                                Close
+                            </Button> */}
+                        </Alert>
+
+                    </CSSTransition>
+                </Container>
             </div>
         </div>
     );
 }
 
 export default Quotes;
+
+
+
+// props.myRef.hover(
+//     function() {
+//         speachBubble.css({
+//             "animation-name": 'expand-bounce',
+//             "animation-duration": ".025s"
+//         });
+//     },
+//     function(){
+//         speachBubble.css({
+//             "animation-name": "shrink",
+//             "animation-duration": "0.1s"
+//         })
+//     }
+// )
