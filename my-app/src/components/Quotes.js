@@ -50,16 +50,14 @@ const Quotes = () =>{
         <div className="bubble-wrap">
             <source src="../sounds/Yo.mp3" type="audio/mp3"/>
             
-            <div className='bubble'>
+            <div >
                 <Container style={{paddingTop: '2rem'}} >
-                    <Button onClick={()=> { 
-                        funHolder(); 
-                        setShowMessage(true);
-                        }}
-                        size="lg"
-                        >
-                        The Gospel 
-                    </Button>
+                    {showButton && (
+                        <Button onClick={()=> { funHolder(); setShowMessage(true);}} size="lg">
+                            The Gospel 
+                        </Button>
+                    )}
+                    
                     <CSSTransition 
                         in={showMessage} 
                         timeout={300} 
